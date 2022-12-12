@@ -5,7 +5,7 @@ const create = async (req, res) => {
     const {name, username, email, password, avatar, background} = req.body;
 
     if(!name || !username || !email || !password || !avatar || !background){
-        res.status(400).send({message:"Submit all fields for registration"})
+        return res.status(400).send({message:"Submit all fields for registration"})
     }
 
     
@@ -44,7 +44,7 @@ const findById = async (req, res) => {
     if(!mongoose.Types.ObjectId.isValid(id)){
         return res.status(400).send({message: 'Invalid ID'})
     }
-    
+
     const user = await userService.findByIdService(id);
 
     if(!user === 0){
