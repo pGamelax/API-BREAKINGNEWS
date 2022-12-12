@@ -92,9 +92,29 @@ const update = async (req, res) => {
 
     res.send({message: "User sucessfuly updated"})
 }
+
+const deleteOne = async (req, res) => {
+    const id = req.params.id;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).send({ message: 'Invalid ID' });
+    };
+
+    const user = await userService.findByIdService(id);
+
+    if (!user === 0) {
+        return res.status(400).send({ message: 'User not found' });
+    };
+
+    await userService.deleteOneService(id);
+
+    res.send({message: "User deleted sucessfuly"});
+
+}
 module.exports = {
     create,
     findAll,
     findById,
     update,
+    deleteOne
 };
