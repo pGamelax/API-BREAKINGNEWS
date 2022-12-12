@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
-const userService = require('../services/user.service')
+import mongoose from 'mongoose';
+import userService from '../services/user.service.js'
 
-const isValidId = (req, res, next) => {
+export const isValidId = (req, res, next) => {
     const id = req.params.id;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -11,7 +11,7 @@ const isValidId = (req, res, next) => {
     next()
 }
 
-const isValidUser = async (req, res, next) => {
+export const isValidUser = async (req, res, next) => {
     const id = req.params.id;
 
     const user = await userService.findByIdService(id);
@@ -26,4 +26,3 @@ const isValidUser = async (req, res, next) => {
     next()
 }
 
-module.exports = { isValidId, isValidUser}
