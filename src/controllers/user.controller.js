@@ -8,6 +8,13 @@ const create = async (req, res) => {
         return res.status(400).send({message:"Submit all fields for registration"})
     }
 
+    const usersFind = await userService.findAllService();
+
+    for(i = 0; i < usersFind.length; i++){
+        if(usersFind[i].email == email){
+            return res.status(400).send({message: "E-mail already registered"})
+        }
+    }
     
     const user = await userService.createService(req.body);
 
