@@ -16,7 +16,10 @@ const login = async (req, res) => {
         if(!passwordIsValid){
             return res.status(404).send({message: "User or passowrd are invalid"})
         }
-        res.send("Login OK!")
+
+        const token = authService.generateToken(user.id)
+
+        res.send({token})
 
     } catch (err) {
         res.status(500).send({ message: err.message })
