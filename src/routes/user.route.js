@@ -1,7 +1,9 @@
 import {Router} from 'express';
-const router = Router();
+
 import userController from '../controllers/user.controller.js'
 import { isValidId, isValidUser } from '../middlewares/global.middlewares.js'
+
+const router = Router();
 
 router.post('/', userController.create);
 router.get('/', userController.findAll);
