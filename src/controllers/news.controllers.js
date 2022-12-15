@@ -1,5 +1,6 @@
 import newsService from "../services/news.service.js"
 
+
 const create = async (req, res) => {
     try {
         const { title, text, banner } = req.body;
@@ -119,9 +120,9 @@ const topNews = async (req, res) => {
 }
 
 const findById = async (req, res) => {
-    try{
+    try {
 
-        const news = await newsService.findByIdService(req.id)
+        const news = await newsService.findByIdService(req.params.id)
 
         res.send({
             news: {
@@ -137,11 +138,64 @@ const findById = async (req, res) => {
             }
         })
 
-    } catch (err){
+    } catch (err) {
         res.status(500).send({ message: err.message })
     }
 
-
-    
 }
-export default { create, findAll, topNews, findById }
+
+const searchByTitle = async (req, res) => {
+    try {
+        const { title } = req.query
+
+        const news = await newsService.searchByTitleService(title)
+
+        if (news.length === 0) {
+            return res.status(400).send({ message: "There are no news with this title" })
+        }
+
+        return res.send({
+            results: news.map(item => ({
+                id: item._id,
+                title: item.title,
+                text: item.text,
+                banner: item.banner,
+                likes: item.likes,
+                comments: item.comments,
+                name: item.user.name,
+                userName: item.user.username,
+                userAvatar: item.user.avatar,
+            }))
+        })
+
+    } catch (err) {
+        res.status(500).send({ message: err.message })
+    }
+}
+
+const searchByUser = async (req, res) => {
+    const id = req.userId
+
+    const news = await newsService.searchByUserService(id)
+
+    if (news.length === 0) {
+        return res.status(400).send({ message: "There are no news with this title" })
+    }
+
+    return res.send({
+        results: news.map(item => ({
+            id: item._id,
+            title: item.title,
+            text: item.text,
+            banner: item.banner,
+            likes: item.likes,
+            comments: item.comments,
+            name: item.user.name,
+            userName: item.user.username,
+            userAvatar: item.user.avatar,
+        }))
+    })
+
+
+}
+export default { create, findAll, topNews, findById, searchByTitle, searchByUser }

@@ -9,6 +9,9 @@ const router = Router();
 router.post('/', authMiddleware, newsController.create)
 router.get('/', newsController.findAll)
 router.get('/top', newsController.topNews)
-router.get('/:id', isValidId, newsController.findById)
+router.get('/search', newsController.searchByTitle)
+router.get('/byUser', authMiddleware, newsController.searchByUser)
+
+router.get('/:id', isValidId, authMiddleware, newsController.findById)
 
 export default router;

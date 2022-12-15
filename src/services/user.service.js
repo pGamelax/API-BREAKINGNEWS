@@ -13,16 +13,17 @@ const findByIdService = (id) => {
 }
 
 const updateService = (id, name, username, email, password, avatar, background) => {
-    return User.findOneAndUpdate({_id:id}, {name, username, email, password, avatar, background});
+    return User.findOneAndUpdate({ _id: id }, { name, username, email, password, avatar, background });
 }
 
 const deleteOneService = (id) => {
-    return User.deleteOne({_id:id})
+    return User.deleteOne({ _id: id })
 }
+
 export default {
     createService,
     findAllService,
     findByIdService,
     updateService,
-    deleteOneService
-};
+    deleteOneService,
+}
