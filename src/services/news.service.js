@@ -15,4 +15,8 @@ const countNews = () => {
 const topNewsService = () => {
     return News.findOne().sort({_id: -1}).populate("user")
 }
-export default { createService, findAllService, countNews, topNewsService }
+
+const findByIdService = (id) => {
+    return News.findById(id).populate("user")
+}
+export default { createService, findAllService, countNews, topNewsService, findByIdService }

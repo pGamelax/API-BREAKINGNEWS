@@ -118,4 +118,30 @@ const topNews = async (req, res) => {
     }
 }
 
-export default { create, findAll, topNews }
+const findById = async (req, res) => {
+    try{
+
+        const news = await newsService.findByIdService(req.id)
+
+        res.send({
+            news: {
+                id: news._id,
+                title: news.title,
+                text: news.text,
+                banner: news.banner,
+                likes: news.likes,
+                comments: news.comments,
+                name: news.user.name,
+                userName: news.user.username,
+                userAvatar: news.user.avatar,
+            }
+        })
+
+    } catch (err){
+        res.status(500).send({ message: err.message })
+    }
+
+
+    
+}
+export default { create, findAll, topNews, findById }
