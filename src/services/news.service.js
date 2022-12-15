@@ -27,7 +27,14 @@ const searchByTitleService = (title) => {
 }
 
 const searchByUserService = (id) => {
-    return News.find({user: id}).sort({_id: -1}).populate("user")
+    return News.find({ user: id }).sort({ _id: -1 }).populate("user")
 }
 
-export default { createService, findAllService, countNews, topNewsService, findByIdService, searchByTitleService, searchByUserService }
+const updateService = (id, title, text, banner) => {
+    return News.findOneAndUpdate({ _id: id }, { title, text, banner }, { rawResult: true })
+}
+
+const eraseService = (id) => {
+    return News.findOneAndDelete({ _id: id })
+}
+export default { createService, findAllService, countNews, topNewsService, findByIdService, searchByTitleService, searchByUserService, updateService, eraseService }

@@ -1,6 +1,5 @@
 import newsService from "../services/news.service.js"
 
-
 const create = async (req, res) => {
     try {
         const { title, text, banner } = req.body;
@@ -174,28 +173,78 @@ const searchByTitle = async (req, res) => {
 }
 
 const searchByUser = async (req, res) => {
-    const id = req.userId
+    try {
+        const id = req.userId
 
-    const news = await newsService.searchByUserService(id)
+        const news = await newsService.searchByUserService(id)
 
-    if (news.length === 0) {
-        return res.status(400).send({ message: "There are no news with this title" })
+        if (news.length === 0) {
+            return res.status(400).send({ message: "There are no news with this title" })
+        }
+
+        return res.send({
+            results: news.map(item => ({
+                id: item._id,
+                title: item.title,
+                text: item.text,
+                banner: item.banner,
+                likes: item.likes,
+                comments: item.comments,
+                name: item.user.name,
+                userName: item.user.username,
+                userAvatar: item.user.avatar,
+            }))
+        })
+    } catch (err) {
+        res.status(500).send({ message: err.message })
     }
 
-    return res.send({
-        results: news.map(item => ({
-            id: item._id,
-            title: item.title,
-            text: item.text,
-            banner: item.banner,
-            likes: item.likes,
-            comments: item.comments,
-            name: item.user.name,
-            userName: item.user.username,
-            userAvatar: item.user.avatar,
-        }))
-    })
-
-
 }
-export default { create, findAll, topNews, findById, searchByTitle, searchByUser }
+
+const update = async (req, res) => {
+    try {
+
+        const { title, text, banner } = req.body
+        const id = req.params.id
+
+        if (!title && !text && !banner) {
+            return res.status(400).send({ message: "Submit at least one fields for update" });
+        };
+
+        const news = await newsService.findByIdService(id);
+
+        if (String(news.user._id) !== req.userId) {
+            return res.status(400).send({
+                message: "You didn't uptade this post"
+            })
+        }
+
+        await newsService.updateService(id, title, text, banner)
+
+        return res.send({ message: "Post sucessfuly updated!" })
+
+    } catch (err) {
+        res.status(500).send({ message: err.message })
+    }
+}
+
+const erase = async (req, res) => {
+    try {
+        const { id } = req.params
+
+        const news = await newsService.findByIdService(id);
+
+        if (String(news.user._id) !== req.userId) {
+            return res.status(400).send({
+                message: "You didn't delete this post"
+            })
+        }
+
+        await newsService.eraseService(id)
+
+        return res.send({ message: "Post sucessfuly deleted!" })
+    } catch (err) {
+        res.status(500).send({ message: err.message })
+    }
+}
+export default { create, findAll, topNews, findById, searchByTitle, searchByUser, update, erase }
