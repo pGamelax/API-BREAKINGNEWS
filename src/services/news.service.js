@@ -4,8 +4,15 @@ const createService = (body) => {
     return News.create(body);
 }
 
-const findAllService = () => {
-    return News.find();
+const findAllService = (offset, limit) => {
+    return News.find().sort({_id: -1}).skip(offset).limit(limit).populate("user");
 }
 
-export default { createService, findAllService }
+const countNews = () => {
+    return News.countDocuments();
+}
+
+const topNewsService = () => {
+    return News.findOne().sort({_id: -1}).populate("user")
+}
+export default { createService, findAllService, countNews, topNewsService }

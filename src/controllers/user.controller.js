@@ -8,13 +8,13 @@ const create = async (req, res) => {
             return res.status(400).send({ message: "Submit all fields for registration" });
         };
 
-        if(password.length < 8){
+        if (password.length < 8) {
             return res.status(400).send({ message: "Enter a password greater than 8 digits" });
         }
         const usersFind = await userService.findAllService();
 
         let i = 0;
-        
+
         for (i = 0; i < usersFind.length; i++) {
             if (usersFind[i].username == username) {
                 return res.status(400).send({ message: "Username already registered" });
