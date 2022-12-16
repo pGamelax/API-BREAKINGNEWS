@@ -247,4 +247,22 @@ const erase = async (req, res) => {
         res.status(500).send({ message: err.message })
     }
 }
-export default { create, findAll, topNews, findById, searchByTitle, searchByUser, update, erase }
+
+const like = async (req, res) => {
+    try {
+        const { id } = req.params
+        const userId = req.userId
+
+        const newsLiked = await newsService.likeService(id, userId)
+
+        if(!newsLiked){
+            await newsService.deleteLikeService(id, userId)
+            return res.status(200).send({message: "Like sucessfully removed"});
+        }
+
+        res.send({message: "Like done sucessfully"})
+    } catch (err) {
+        res.status(500).send({ message: err.message })
+    }
+}
+export default { create, findAll, topNews, findById, searchByTitle, searchByUser, update, erase, like }

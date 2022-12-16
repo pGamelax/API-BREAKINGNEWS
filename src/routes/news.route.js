@@ -14,6 +14,7 @@ router.get('/search', newsController.searchByTitle)
 router.get('/byUser', authMiddleware, newsController.searchByUser)
 router.get('/:id', authMiddleware, newsController.findById)
 router.patch('/:id', authMiddleware, newsController.update)
+router.patch('/like/:id', authMiddleware, newsController.like)
 router.delete('/:id', authMiddleware, newsController.erase)
 
 export default router;
