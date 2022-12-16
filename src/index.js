@@ -9,6 +9,15 @@ import newsRoute from './routes/news.route.js'
 import swaggerRoute from './routes/swagger.route.cjs'
 
 dotenv.config()
+const cors = require('cors')
+
+app.use((req, res, next)=>{
+
+    res.header("Access-Control-Allow-Origin","*")
+    app.use(cors())
+    next()
+})
+
 
 const port = process.env.PORT || 3000
 const app = express();
