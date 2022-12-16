@@ -12,17 +12,17 @@ import cors from 'cors'
 dotenv.config()
 
 
+
+
+
+const port = process.env.PORT || 3000
+const app = express();
 app.use((req, res, next)=>{
 
     res.header("Access-Control-Allow-Origin","*")
     app.use(cors())
     next()
 })
-
-
-const port = process.env.PORT || 3000
-const app = express();
-
 connectDatabase()
 
 app.use(express.json());
