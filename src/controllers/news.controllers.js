@@ -255,14 +255,59 @@ const like = async (req, res) => {
 
         const newsLiked = await newsService.likeService(id, userId)
 
-        if(!newsLiked){
+        if (!newsLiked) {
             await newsService.deleteLikeService(id, userId)
-            return res.status(200).send({message: "Like sucessfully removed"});
+            return res.status(200).send({ message: "Like sucessfully removed" });
         }
 
-        res.send({message: "Like done sucessfully"})
+        res.send({ message: "Like done sucessfully" })
     } catch (err) {
         res.status(500).send({ message: err.message })
     }
 }
-export default { create, findAll, topNews, findById, searchByTitle, searchByUser, update, erase, like }
+
+const addComment = async (req, res) => {
+    try {
+        const { id } = req.params
+        const userId = req.userId
+        const { comment } = req.body
+
+        if (!comment) {
+            return res.status(400).send({ message: "Write a message to comment" })
+        }
+
+        await newsService.addCommentService(id, comment, userId)
+
+        res.send({
+            message: "Comment sucessfully completed"
+        })
+    } catch (err) {
+        res.status(500).send({ message: err.message })
+    }
+}
+
+const DeleteComment = async (req, res) => {
+    try {
+        const { idNews, idComment } = req.params
+        const userId = req.userId
+
+        const commentDeleted = await newsService.deleteCommentService(idNews, idComment, userId)
+
+
+        const commentFinder = commentDeleted.comments.find((comment => comment.idComment === idComment))
+
+        if (!commentFinder) {
+            return res.status(404).send({ message: "Comment not found" })
+        }
+        if (commentFinder.userId !== userId) {
+            return res.status(400).send({ message: "You can't delete this comment" })
+        }
+
+        res.send({
+            message: "Comment sucessfully removed!"
+        })
+    } catch (err) {
+        res.status(500).send({ message: err.message })
+    }
+}
+export default { create, findAll, topNews, findById, searchByTitle, searchByUser, update, erase, like, addComment, DeleteComment }
