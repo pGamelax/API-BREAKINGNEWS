@@ -8,8 +8,9 @@ import authRoute from './routes/auth.route.js';
 import newsRoute from './routes/news.route.js'
 import swaggerRoute from './routes/swagger.route.cjs'
 
+import cors from 'cors'
 dotenv.config()
-const cors = require('cors')
+
 
 app.use((req, res, next)=>{
 
